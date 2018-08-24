@@ -38,8 +38,7 @@ class DTEInsightExtractor:
         response = self.session.request(method, 'https://dtei-coreapi.pwly.io/v2' + url, headers=headers, **kwargs)
 
         if response.status_code == 502:
-            logger.warning('API returned a 502. Cooling off for a while...')
-            time.sleep(60)
+            logger.warning('API returned a 502. Increasing delay...')
 
             return self.api(method, url, authenticated=authenticated, delay=60 + delay, **kwargs)
         else:
@@ -73,8 +72,6 @@ class DTEInsightExtractor:
 
         left = datetime(2000, 1, 1, tzinfo=timezone.utc)
         right = datetime.now(timezone.utc)
-
-        return datetime(2018, 1, 1, tzinfo=timezone.utc)
 
         while abs(left - right) > timedelta(days=1):
             midpoint = left + timedelta(seconds=math.ceil((right - left).total_seconds() / 2))
